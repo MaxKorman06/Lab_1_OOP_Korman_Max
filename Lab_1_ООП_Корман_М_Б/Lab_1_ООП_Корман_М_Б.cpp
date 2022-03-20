@@ -1,108 +1,57 @@
-﻿#include <iostream>
-#include <string>
-
-using namespace std;
-
-const int L_name = 30;
-
-class GOODS
-{
-	private:
-		char name[L_name];
-		int number;
-		float price;
-
-	public:
-		void Show() // Вивід класу
-		{
-			cout << "Назва товару: " << GetName() << '\n';
-			cout<< "Номер товару: " << GetNumber() << '\n';
-			cout << "Ціна товару: " << GetPrice() << '\n';
-		}
-
-		void SetName(const char* value_name) // Присвоїти назву
-		{
-			for (size_t i = 0; i < L_name; i++)
-			{
-				name[i] = value_name[i];
-			}
-		} 
-		void SetNumber(int value_number) // Присвоїти номер
-		{
-			number = value_number;
-		}
-		void SetPrice(float value_price) // Присвоїти ціну
-		{
-			price = value_price;
-		}
-		void Set(const char* value_name, int value_number, float value_price) // Присвоїти назву, номер, ціну
-		{
-			SetName(value_name);
-			SetNumber(value_number);
-			SetPrice(value_price);
-		} 
-
-		char* GetName() // Отримати назву
-		{
-				return name;
-		}
-		int GetNumber() // Отримати номер
-		{
-			return number;
-		}
-		float GetPrice() // Отримати ціну
-		{
-			return price;
-		}\
-
-		GOODS() // Конструктор без параметрів
-		{
-			char defName[] = "NONE";
-			for (size_t i = 0; i < sizeof(defName); i++)
-			{
-				name[i] = defName[i];
-			}
-			number = 0;
-			price = 0;
-
-			cout << "Виклик конструктора без параметрів" << this << '\n';
-		}		
-		GOODS(const char* value_name, int value_number, float value_price) // Конструктор з параметрами
-		{
-			Set(value_name, value_number, value_price);
-
-			cout << "Виклик конструктора" << this << '\n';
-		}
-		GOODS(const GOODS &other) // Конструктор копіювання
-		{
-			for (size_t i = 0; i < L_name; i++)
-			{
-				this->name[i] = other.name[i];
-			}
-
-			this->number = other.number;
-			this->price = other.price;
-
-			cout << "Виклик конструктора копійування" << this << '\n';
-		}
-		~GOODS()// Деструктор
-		{
-			cout << "Виклик деструктора" << this << '\n';
-		}
-};
-
+﻿#include "Class.h"
 
 int main()
 {
 	setlocale(LC_ALL, "ukr");
 
+	GOODS* bananas = new GOODS; // Вказівник на екземпляр(обєкт) класу
+	bananas->Set("bananas", 7, 4);
+	bananas->Show();
+	delete bananas;
+
+	cout << '\n';
+
 	GOODS apple("apple", 2, 3);
 	apple.Show();
 	
+	cout << '\n';
+
 	GOODS orange;
 	orange.Set("orange", 6, 2);
 	orange.Show();
 
-	GOODS lemon(apple);
-	lemon.Show();
+	cout << '\n';
+
+	GOODS apple2(apple);
+	apple2.Show();
+
+	cout << '\n';
+
+	const int numBerris = 3;
+	GOODS berris[numBerris];
+	berris[0].Set("strawberries", 5, 6);
+	berris[1].Set("blackberry", 9, 8);
+	berris[2].Set("cherry", 7, 9);
+	for (size_t i = 0; i < numBerris; i++)
+	{
+		berris[i].Show();
+	}
+
+	cout << '\n';
+	
+	GOODS none;
+	none.Show();
+
+	cout << '\n';
+
+	GOODS* p = new GOODS;	// Шановний пане який читає цей коментар,
+	p->Set("grape", 5, 6);	// коли я його писав, я думав,
+	void (GOODS:: * pf)();	// що розуміє цю частину коду тільки я і Бог,
+	pf = &GOODS::Show;		// тепер розуміє тільки Бог.
+	(p[0].*pf)();			// 
+	delete p;				// Годин потрачено на зрозуміння коду 1.1
+
+	cout << '\n';
+
+	return 0;
 }
